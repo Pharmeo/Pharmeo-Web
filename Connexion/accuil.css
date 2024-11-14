@@ -1,0 +1,16 @@
+.titre{
+    display: flex;
+    justify-content: center;
+}
+
+.champDeTexte{
+    display: flex;
+    justify-content: center;
+}
+
+.marginTop{
+    margin-top: 5%;
+}
+
+
+

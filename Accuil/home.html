@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>PHARMEO - Accueil</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" href="home.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top ml-auto d-flex align-items-center">
+        <div class="container-fluid">
+            <span class="navbar-brand">PHARMEO</span>
+            <button class="btn btn-danger" id="gestionPersonnelButton">Gestion personnel</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Username
+            </button>
+        </div>
+    </nav>
+
+    <div class="sidebar position-fixed">
+        <h5>Filtres</h5>
+    </div>
+
+    <div class="content-area">
+        <div class="search-bar">
+            <input type="text" class="form-control" placeholder="Barre de recherche">
+            <button class="btn btn-primary">Search</button>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="card card-custom">
+                    <img src="https://via.placeholder.com/100" class="card-img-top" alt="image médicament">
+                    <div class="card-body">
+                        <h5 class="card-title">Nom médic.</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Bootstrap -->
+    <div class="modal fade" id="exampleModal" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!-- Vue principale de la modale -->
+                <div id="mainView">
+                    <div class="modal-title d-flex align-items-center justify-content-center mt-3">
+                        <h5 class="modal-title" id="exampleModalLabel">Username</h5>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center mt-4">
+                        <img src="../Pictures/pngwing.com.png" alt="UserPictures" style="width: 100px; height: auto;">
+                    </div>
+                    <div class="modal-body align-self-center d-flex flex-column mt-2">
+                        <button type="button" class="btn btn-primary" id="parametreBtn">Paramètre</button>
+                        <a href="../Connexion/Accuil.html" type="button" class="btn btn-primary mt-2">Déconnexion</a>
+                    </div>
+                    <div class="modal-body d-flex justify-content-end">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+
+                <!-- Vue paramètres de la modale -->
+                <div id="settingsView" class="d-none">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Paramètres</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container d-flex flex-column align-items-center justify-content-center mt-1 p-4 border rounded"
+                            style="max-width: 600px;">
+
+                            <!-- Identifiant -->
+                            <div class="mb-3 w-100">
+                                <label for="identifiant" class="form-label">Votre email :</label>
+                                <input type="email" class="form-control" id="identifiant"
+                                    placeholder="exemple@gmail.fr">
+                            </div>
+
+                            <!-- Mot de passe -->
+                            <div class="mb-3 w-100">
+                                <label for="password" class="form-label">Votre mot de passe :</label>
+                                <input type="password" class="form-control" id="password" placeholder="ex: toto">
+                            </div>
+
+                            <hr class="w-100">
+
+                            <!-- Prénom, Nom, Mobile in one row -->
+                            <div class="row w-100">
+                                <div class="col-md-4 mb-3">
+                                    <label for="prenom" class="form-label">Prénom :</label>
+                                    <input type="text" class="form-control" id="prenom" placeholder="ex: Henri">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="nom" class="form-label">Nom :</label>
+                                    <input type="text" class="form-control" id="nom" placeholder="ex: Delacour">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="mobile" class="form-label">Mobile :</label>
+                                    <input type="tel" class="form-control" id="mobile" placeholder="ex: 072515****">
+                                </div>
+                            </div>
+
+                            <!-- Code postal -->
+                            <div class="mb-4 w-100">
+                                <label for="postalCode" class="form-label">Code Postal :</label>
+                                <input type="text" class="form-control" id="postalCode" placeholder="ex: 60200">
+                            </div>
+
+                            <!-- Ville -->
+                            <div class="mb-3 w-100">
+                                <label for="ville" class="form-label">Ville :</label>
+                                <input type="text" class="form-control" id="ville" placeholder="ex: Monako">
+                            </div>
+
+                            <!-- Bouton Enregistrer est annuler -->
+                            <div class="d-flex justify-content-center w-100">
+                                <button id="registerButton" class="btn btn-primary me-2 " disabled>Enregistrer</button>
+                                <button type="button" class="btn btn-secondary " id="backBtn">Fermer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const isAdmin = localStorage.getItem("isAdmin") === "true";
+            const gestionButton = document.getElementById("gestionPersonnelButton");
+
+            if (!isAdmin) {
+                gestionButton.style.display = "none";
+            }
+
+            // Gestion du changement de vue dans la modale
+            document.getElementById("parametreBtn").addEventListener("click", function () {
+                document.getElementById("mainView").classList.add("d-none");
+                document.getElementById("settingsView").classList.remove("d-none");
+            });
+
+            document.getElementById("backBtn").addEventListener("click", function () {
+                document.getElementById("settingsView").classList.add("d-none");
+                document.getElementById("mainView").classList.remove("d-none");
+            });
+        });
+        // Sélection des éléments d'entrée et du bouton
+        const inputs = document.querySelectorAll('#identifiant, #password, #confirmPassword, #prenom, #nom, #mobile, #postalCode, #ville');
+        const registerButton = document.getElementById('registerButton');
+
+        // Fonction pour vérifier si tous les champs sont remplis
+        function checkInputs() {
+            let allFilled = true;
+            inputs.forEach(input => {
+                if (input.value.trim() === '') {
+                    allFilled = false;
+                }
+            });
+            registerButton.disabled = !allFilled;
+        }
+
+        // Ajouter des écouteurs d'événement pour vérifier les champs lorsque l'utilisateur tape
+        inputs.forEach(input => {
+            input.addEventListener('input', checkInputs);
+        });
+    </script>
+</body>
+
+</html>

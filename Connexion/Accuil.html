@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="accuil.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>PHARMEO</title>
+</head>
+
+<body>
+
+    <div class="container mt-5 p-4 border rounded aligne-items-center" style="max-width: 500px;">
+        <div class="d-flex justify-content-center mb-4">
+            <h1>PHARMEO</h1>
+        </div>
+        <div class="row g-3 align-items-center justify-content-center mb-3">
+            <div class="col-auto">
+                <label for="email" class="col-form-label">Email :</label>
+            </div>
+            <div class="col-auto">
+                <input type="email" id="email" class="form-control" placeholder="Votre email" required>
+            </div>
+        </div>
+        <div class="row g-3 align-items-center justify-content-center mb-3">
+            <div class="col-auto">
+                <label for="password" class="col-form-label">Password :</label>
+            </div>
+            <div class="col-auto">
+                <input type="password" id="password" class="form-control" placeholder="Votre mot de passe" required>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center mt-4 mb-4">
+            <button id="loginButton" class="btn btn-primary px-4" disabled>
+                Se connecter
+            </button>
+        </div>
+        <div class="d-flex flex-column align-items-center mt-3">
+            <h6>Vous avez oublié votre mot de passe ?</h6>
+            <button id="forgotPasswordButton" class="btn btn-primary px-4" disabled>
+                Mot de passe oublié
+            </button>
+        </div>
+        <div class="d-flex flex-column align-items-center mt-4">
+            <h6>Vous n'avez pas de compte</h6>
+            <a href="../inscription/pageDinscription.html" class="btn btn-primary px-4">
+                Cliquez ici !
+            </a>
+        </div>
+    </div>
+<script>
+    // Sélection des éléments du DOM
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const loginButton = document.getElementById('loginButton');
+    const forgotPasswordButton = document.getElementById('forgotPasswordButton');
+    
+    // Fonction de validation des champs de saisie
+    function validateInputs() {
+        // Le bouton "loginButton" est activé seulement si les deux champs (email et mot de passe) sont remplis
+        loginButton.disabled = !(emailInput.value.trim() && passwordInput.value.trim());
+    
+        // Le bouton "forgotPasswordButton" est activé seulement si le champ email est rempli
+        forgotPasswordButton.disabled = !emailInput.value.trim();
+    }
+    
+    // Écouteurs d'événements pour valider les champs de saisie lors de la modification
+    emailInput.addEventListener('input', validateInputs);
+    passwordInput.addEventListener('input', validateInputs);
+    
+    // Écouteur d'événement pour le bouton de connexion
+    loginButton.addEventListener('click', function() {
+        const email = emailInput.value.trim();
+        const password = passwordInput.value.trim();
+    
+        // Vérification des combinaisons email/mot de passe
+        if (email === "toto@gmail.com" && password !== "admin") {
+            alert("Mot de passe incorrect.");
+            return;
+        }
+    
+        if (email === "admin@example.com" && password !== "toto") {
+            alert("Mot de passe incorrect.");
+            return;
+        }
+    
+        // Redirection et stockage de l'information d'admin dans localStorage
+        if (email === "admin@example.com") {
+            localStorage.setItem("isAdmin", "true");
+        } else {
+            localStorage.setItem("isAdmin", "false");
+        }
+    
+        // Rediriger vers la page d'accueil
+        window.location.href = "../Accuil/home.html";
+    });
+    
+    // Écouteur d'événement pour le bouton "Mot de passe oublié"
+    forgotPasswordButton.addEventListener('click', function() {
+        const email = emailInput.value.trim();
+    
+        // Vérifie si l'email est "toto@gmail.com" ou "admin@example.com" avant de rediriger
+        if (email === "toto@gmail.com" || email === "admin@example.com") {
+            window.location.href = "../MotDePasse/motDePasse.html";
+        } else {
+            alert("Email non reconnu pour la récupération du mot de passe.");
+        }
+    });
+    
+    // Initialiser la validation lors du chargement de la page
+    validateInputs();
+</script>    
+
+</body>
+
+</html>
