@@ -43,68 +43,7 @@
             </button>
         </div>
     </div>
-<script>
-    // Sélection des éléments du DOM
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-    const loginButton = document.getElementById('loginButton');
-    const forgotPasswordButton = document.getElementById('forgotPasswordButton');
-    
-    // Fonction de validation des champs de saisie
-    function validateInputs() {
-        // Le bouton "loginButton" est activé seulement si les deux champs (email et mot de passe) sont remplis
-        loginButton.disabled = !(emailInput.value.trim() && passwordInput.value.trim());
-    
-        // Le bouton "forgotPasswordButton" est activé seulement si le champ email est rempli
-        forgotPasswordButton.disabled = !emailInput.value.trim();
-    }
-    
-    // Écouteurs d'événements pour valider les champs de saisie lors de la modification
-    emailInput.addEventListener('input', validateInputs);
-    passwordInput.addEventListener('input', validateInputs);
-    
-    // Écouteur d'événement pour le bouton de connexion
-    loginButton.addEventListener('click', function() {
-        const email = emailInput.value.trim();
-        const password = passwordInput.value.trim();
-    
-        // Vérification des combinaisons email/mot de passe
-        if (email === "toto@gmail.com" && password !== "admin") {
-            alert("Mot de passe incorrect.");
-            return;
-        }
-    
-        if (email === "admin@example.com" && password !== "toto") {
-            alert("Mot de passe incorrect.");
-            return;
-        }
-    
-        // Redirection et stockage de l'information d'admin dans localStorage
-        if (email === "admin@example.com") {
-            localStorage.setItem("isAdmin", "true");
-        } else {
-            localStorage.setItem("isAdmin", "false");
-        }
-    
-        // Rediriger vers la page d'accueil
-        window.location.href = "../Accuil/home.html";
-    });
-    
-    // Écouteur d'événement pour le bouton "Mot de passe oublié"
-    forgotPasswordButton.addEventListener('click', function() {
-        const email = emailInput.value.trim();
-    
-        // Vérifie si l'email est "toto@gmail.com" ou "admin@example.com" avant de rediriger
-        if (email === "toto@gmail.com" || email === "admin@example.com") {
-            window.location.href = "../MotDePasse/motDePasse.html";
-        } else {
-            alert("Email non reconnu pour la récupération du mot de passe.");
-        }
-    });
-    
-    // Initialiser la validation lors du chargement de la page
-    validateInputs();
-</script>    
+<script src="../JavaScript/connextion.js"></script>    
 
 </body>
 
