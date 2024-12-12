@@ -10,7 +10,7 @@ function checkIdentifiant() {
 // Ajouter un écouteur d'événement sur le champ identifiant
 identifiantInput.addEventListener('input', checkIdentifiant);
 
-// Redirection lors du clic sur le bouton renvoyer mot de passe
+// Redirection lors du clic sur le bouton "Renvoyer mot de passe"
 sendPasswordButton.addEventListener('click', function () {
     const email = identifiantInput.value.trim();
 

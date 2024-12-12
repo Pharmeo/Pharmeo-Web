@@ -28,12 +28,14 @@ function checkInputs() {
     const inputs = [identifiant, password, confirmPassword, prenom, nom, mobile, postalCode, adresse, ville, role];
     let allFilled = true;
 
+    // Vérifie que chaque champ est rempli
     inputs.forEach(input => {
         if (input.value.trim() === '') {
             allFilled = false;
         }
     });
 
+    // Valide l'email
     if (!validateEmail(identifiant.value)) {
         emailError.style.display = 'block';
         allFilled = false;
@@ -41,6 +43,7 @@ function checkInputs() {
         emailError.style.display = 'none';
     }
 
+    // Valide les mots de passe
     if (!validatePasswords()) {
         passwordError.style.display = 'block';
         allFilled = false;
@@ -48,10 +51,11 @@ function checkInputs() {
         passwordError.style.display = 'none';
     }
 
+    // Active ou désactive le bouton d'inscription
     registerButton.disabled = !allFilled;
 }
 
-// Écouteurs d'événements
+// Ajoute un écouteur d'événement pour chaque champ
 const inputs = [identifiant, password, confirmPassword, prenom, nom, mobile, postalCode, adresse, ville, role];
 inputs.forEach(input => {
     input.addEventListener('input', checkInputs);
@@ -64,6 +68,7 @@ async function sendPostRequest() {
         return;
     }
 
+    // Prépare les données pour l'envoi
     const data = {
         fk_profil: role.value === 'admin' ? '1' : '3',
         nom_compte: identifiant.value,
@@ -76,11 +81,15 @@ async function sendPostRequest() {
         ville: ville.value,
         code_postal: postalCode.value
     };
+
+    // Récupère le token depuis le stockage local
     const token = localStorage.getItem('token');
     if (!token) {
         alert('Token manquant');
         return;
     }
+
+    // Envoi de la requête à l'API
     try {
         const response = await fetch('http://localhost:3000/createClient', {
             method: 'POST',
@@ -102,7 +111,8 @@ async function sendPostRequest() {
     }
 }
 
+// Ajoute un écouteur d'événement pour le bouton d'inscription
 registerButton.addEventListener('click', function (event) {
-    event.preventDefault();
+    event.preventDefault(); // Empêche le comportement par défaut du formulaire
     sendPostRequest();
 });
