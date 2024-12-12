@@ -1,3 +1,4 @@
+
 // Sélection des éléments du DOM
 const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
@@ -56,6 +57,15 @@ async function handleLogin() {
         const userData = await userResponse.json();
         localStorage.setItem('fk_profil', userData.compte.fk_profil);
         localStorage.setItem('username', userData.compte.prenom);
+        localStorage.setItem('nom_compte', userData.compte.nom_compte);
+        localStorage.setItem('nom', userData.compte.nom);
+        localStorage.setItem('mail', userData.compte.mail);
+        localStorage.setItem('numero_telephone', userData.compte.numero_telephone);
+        localStorage.setItem('adresse', userData.compte.adresse);
+        localStorage.setItem('ville', userData.compte.ville);
+        localStorage.setItem('code_postal', userData.compte.code_postal);
+        localStorage.setItem('password', userData.compte.mot_de_passe);
+
         window.location.href = "../Accuil/home.html";
     } catch (error) {
         console.error('Erreur lors de la connexion :', error);
@@ -72,6 +82,20 @@ function handleForgotPassword() {
         alert("Email non reconnu pour la récupération du mot de passe.");
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const passwordInput = document.getElementById('password');
+    const togglePassword = document.getElementById('togglePassword');
+
+    togglePassword.addEventListener('click', () => {
+        // Basculer le type d'input entre "password" et "text"
+        const type = passwordInput.type === 'password' ? 'text' : 'password';
+        passwordInput.type = type;
+
+        // Changer l'icône en fonction de l'état
+        togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
+    });
+});
 
 // Ajout des écouteurs
 emailInput.addEventListener('input', validateInputs);

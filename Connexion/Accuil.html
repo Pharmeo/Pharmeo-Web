@@ -26,13 +26,17 @@
         <div class="row g-3 align-items-center justify-content-center mb-3">
             <div class="col-auto">
                 <label for="password" class="col-form-label">Password :</label>
+                <span id="togglePassword" class="position-absolute"
+                    style="top: 30%; left: 57%; cursor: pointer;">
+                    👁️
+                </span>
             </div>
             <div class="col-auto">
                 <input type="password" id="password" class="form-control" placeholder="Votre mot de passe" required>
             </div>
             <div class="col-auto">
                 <small id="passwordError" class="text-danger"></small>
-            </div>            
+            </div>
         </div>
         <div class="d-flex justify-content-center mt-4 mb-4">
             <button id="loginButton" class="btn btn-primary px-4" disabled>
@@ -47,7 +51,7 @@
         </div>
     </div>
 
-<script src="../JavaScript/connextion.js"></script>    
+    <script src="../JavaScript/connextion.js"></script>
 
 </body>
 

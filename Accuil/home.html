@@ -16,8 +16,9 @@
         <div class="container-fluid">
             <span class="navbar-brand">PHARMEO</span>
             <button class="btn btn-danger" id="toggleGestionPersonnel">Gestion personnel</button>
-            <a href="../inscription/pageDinscription.html" class="btn btn-danger gestion-options" style="display: none;">Ajouté un pharmacien</a>
-            <a href="#" class="btn btn-danger gestion-options" style="display: none;">Supprimé un pharmacien</a>            
+            <a href="../inscription/pageDinscription.html" class="btn btn-danger gestion-options"
+                style="display: none;">Ajouté un pharmacien</a>
+            <a href="#" class="btn btn-danger gestion-options" style="display: none;">Supprimé un pharmacien</a>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Username
             </button>
@@ -26,9 +27,75 @@
 
     <div class="sidebar position-fixed">
         <h5>Filtres</h5>
+        <form id="filters-form">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="nervous" name="filters" value="Nerveux central">
+                <label class="form-check-label" for="nervous">Nerveux central</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="musculo" name="filters"
+                    value="Musculo-squelettique">
+                <label class="form-check-label" for="musculo">Musculo-squelettique</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="respiratory" name="filters" value="Respiratoire">
+                <label class="form-check-label" for="respiratory">Respiratoire</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="digestive" name="filters" value="Digestif">
+                <label class="form-check-label" for="digestive">Digestif</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="cardio" name="filters" value="Cardiovasculaire">
+                <label class="form-check-label" for="cardio">Cardiovasculaire</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="endocrine" name="filters" value="Endocrinien">
+                <label class="form-check-label" for="endocrine">Endocrinien</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="renal" name="filters" value="Rénal">
+                <label class="form-check-label" for="renal">Rénal</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="immune" name="filters" value="Immunitaire">
+                <label class="form-check-label" for="immune">Immunitaire</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="bone" name="filters" value="Osseux">
+                <label class="form-check-label" for="bone">Osseux</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="urinary" name="filters" value="Urinaire">
+                <label class="form-check-label" for="urinary">Urinaire</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="vascular" name="filters" value="Vasculaire">
+                <label class="form-check-label" for="vascular">Vasculaire</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="dermatologic" name="filters" value="Dermatologique">
+                <label class="form-check-label" for="dermatologic">Dermatologique</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="oncologic" name="filters" value="Oncologique">
+                <label class="form-check-label" for="oncologic">Oncologique</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="infectious" name="filters" value="Infectieux">
+                <label class="form-check-label" for="infectious">Infectieux</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="hepatic" name="filters" value="Hépatique">
+                <label class="form-check-label" for="hepatic">Hépatique</label>
+            </div>
 
+            <div class="mt-3">
+                <button type="button" class="btn btn-primary" id="validate-btn">Valider</button>
+                <button type="button" class="btn btn-secondary mt-1" id="reset-btn">Réinitialiser</button>
+            </div>
+        </form>
     </div>
-
 
     <div class="content-area">
         <div class="search-bar">
@@ -61,7 +128,8 @@
                     <div class="row">
                         <!-- Image à gauche -->
                         <div class="col-md-4">
-                            <img src="../Pictures/pictures-medicaments.webp" alt="Image du médicament" class="img-fluid" id="medicamentImage">
+                            <img src="../Pictures/pictures-medicaments.webp" alt="Image du médicament" class="img-fluid"
+                                id="medicamentImage">
                         </div>
                         <!-- Informations à droite -->
                         <div class="col-md-8 d-flex flex-column mt-4 ">
@@ -118,10 +186,22 @@
                                     placeholder="exemple@gmail.fr">
                             </div>
 
-                            <!-- Mot de passe -->
-                            <div class="mb-3 w-100">
+                            <div class="mb-3 w-100 position-relative">
                                 <label for="password" class="form-label">Votre mot de passe :</label>
                                 <input type="password" class="form-control" id="password" placeholder="ex: toto">
+                                <span id="togglePassword" class="position-absolute"
+                                    style="top: 74%; right: 10px; transform: translateY(-50%); cursor: pointer;">
+                                    👁️
+                                </span>
+                            </div>
+
+                            <div class="mb-3 w-100">
+                                <label for="role" class="form-label">Choisir votre rôle :</label>
+                                <select id="role" class="form-select" required>
+                                    <option value="" selected disabled>-- Sélectionnez un rôle --</option>
+                                    <option value="pharmacien">Pharmacien</option>
+                                    <option value="admin">Administrateur</option>
+                                </select>
                             </div>
 
                             <hr class="w-100">

@@ -6,7 +6,7 @@ document.getElementById("toggleGestionPersonnel").addEventListener("click", func
 
 // Initialise l'affichage basé sur le profil et le username
 document.addEventListener("DOMContentLoaded", function () {
-    const gestionButton = document.getElementById("gestionPersonnelButton");
+    const gestionButton = document.getElementById("toggleGestionPersonnel");
     if (gestionButton) gestionButton.style.display = localStorage.getItem("fk_profil") === "1" ? "block" : "none";
 
     const usernameButton = document.querySelector('button[data-bs-target="#exampleModal"]');
@@ -102,18 +102,31 @@ function renderPagination() {
 }
 
 // Gère la recherche de médicaments
-document.getElementById('searchButton').addEventListener('click', async () => {
-    const searchInput = document.getElementById('searchInput').value.trim();
+document.getElementById('validate-btn').addEventListener('click', async () => {
+    const selectedFilters = Array.from(document.querySelectorAll('input[name="filters"]:checked'))
+        .map(checkbox => checkbox.value);
+    const searchInput = document.getElementById('searchInput')?.value.trim();
+
     const token = localStorage.getItem('token');
     if (!token) return console.error('Token manquant');
 
-    const url = searchInput ? `http://localhost:3000/search/${searchInput}` : 'http://localhost:3000/medicaments';
+    let url = 'http://localhost:3000/medicaments';
+
+    // Construire la query string en fonction des entrées
+    const queryParams = new URLSearchParams();
+    if (searchInput) queryParams.append('name', searchInput);
+    if (selectedFilters.length) queryParams.append('system', selectedFilters.join(','));
+
+    url += `?${queryParams.toString()}`;
+
     try {
         const response = await fetch(url, { method: 'GET', headers: { 'Authorization': `${token}` } });
         if (!response.ok) throw new Error('Erreur lors de la recherche');
         const data = await response.json();
+
         const cardContainer = document.getElementById('medicamentCards');
         cardContainer.innerHTML = '';
+
         if (data.medicaments?.length) {
             data.medicaments.forEach(medicament => {
                 const card = document.createElement('div');
@@ -129,12 +142,184 @@ document.getElementById('searchButton').addEventListener('click', async () => {
                 cardContainer.appendChild(card);
             });
         } else {
-            cardContainer.innerHTML = `<p class="text-danger">Aucun médicament trouvé pour "${searchInput}"</p>`;
+            cardContainer.innerHTML = `<p class="text-danger">Aucun médicament trouvé pour la recherche</p>`;
         }
     } catch (error) {
         console.error('Erreur:', error);
     }
 });
 
+// Gère la recherche par le bouton de recherche
+// Réutilise également les mêmes logiques pour plus de cohérence
+document.getElementById('searchButton').addEventListener('click', async () => {
+    document.getElementById('validate-btn').click();
+});
+
 // Charge les médicaments à l'initialisation
 document.addEventListener('DOMContentLoaded', () => loadMedicaments());
+
+// Réinitialise les filtres et recharge la page
+document.getElementById('reset-btn').addEventListener('click', () => {
+    document.getElementById('filters-form').reset();
+    document.getElementById('searchInput').value = '';
+    location.reload();
+});
+
+
+// Fonction pour récupérer et afficher les données dans les inputs
+document.addEventListener('DOMContentLoaded', () => {
+
+    function populateFields() {
+        document.getElementById('identifiant').value = localStorage.getItem('mail') || '';
+        document.getElementById('password').value = localStorage.getItem('password') || '';
+        document.getElementById('prenom').value = localStorage.getItem('username') || '';
+        document.getElementById('nom').value = localStorage.getItem('nom') || '';
+        document.getElementById('mobile').value = localStorage.getItem('numero_telephone') || '';
+        document.getElementById('postalCode').value = localStorage.getItem('code_postal') || '';
+        document.getElementById('ville').value = localStorage.getItem('ville') || '';
+        // Gérer le fk_profil pour sélectionner le rôle
+        const fkProfil = localStorage.getItem('fk_profil');
+        const roleSelect = document.getElementById('role');
+        if (fkProfil === '1') {
+            roleSelect.value = 'admin';
+        } else if (fkProfil === '3') {
+            roleSelect.value = 'pharmacien';
+        }
+    }
+
+    // Appeler la fonction pour initialiser les champs avec les données de localStorage
+    populateFields();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const passwordInput = document.getElementById('password');
+    const togglePassword = document.getElementById('togglePassword');
+
+    togglePassword.addEventListener('click', () => {
+        // Basculer le type d'input entre "password" et "text"
+        const type = passwordInput.type === 'password' ? 'text' : 'password';
+        passwordInput.type = type;
+
+        // Changer l'icône en fonction de l'état
+        togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
+    });
+});
+
+
+
+
+
+
+
+
+
+
+//--------------------------------------------------test zones--------------------------------------------------------------------------------\\
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
