@@ -24,18 +24,24 @@
         </div>
 
         <!-- Mot de passe -->
-        <div class="mb-3 w-100">
+        <div class="mb-3 w-100 position-relative">
             <label for="password" class="form-label">Votre mot de passe :</label>
             <input type="password" class="form-control" id="password" placeholder="ex: toto" required>
+            <span id="togglePassword" class="position-absolute"
+                style="top: 70%; right: 10px; transform: translateY(-50%); cursor: pointer;">
+                👁️
+            </span>
         </div>
 
         <!-- Retaper mot de passe -->
-        <div class="mb-3 w-100">
+        <div class="mb-3 w-100 position-relative">
             <label for="confirmPassword" class="form-label">Retaper votre mot de passe :</label>
             <input type="password" class="form-control" id="confirmPassword" placeholder="" required>
-            <div id="passwordError" class="text-danger" style="display:none;">Les mots de passe ne correspondent pas.
+            <div id="passwordError" class="text-danger" style="display:none;">
+                Les mots de passe ne correspondent pas.
             </div>
         </div>
+
 
         <!-- Rôle -->
         <div class="mb-3 w-100">

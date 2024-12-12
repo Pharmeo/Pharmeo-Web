@@ -101,6 +101,23 @@ function renderPagination() {
         </li>`;
 }
 
+// Gère l'état du bouton Réinitialiser
+function updateResetButtonState() {
+    const selectedFilters = Array.from(document.querySelectorAll('input[name="filters"]:checked'));
+    const searchInput = document.getElementById('searchInput')?.value.trim();
+    const resetButton = document.getElementById('reset-btn');
+
+    resetButton.disabled = selectedFilters.length === 0 && !searchInput;
+
+
+    // Désactiver si aucun filtre n'est sélectionné et si le champ de recherche est vide
+    if (selectedFilters.length === 0 && !searchInput) {
+        resetButton.disabled = true;
+    } else {
+        resetButton.disabled = false;
+    }
+}
+
 // Gère la recherche de médicaments
 document.getElementById('validate-btn').addEventListener('click', async () => {
     const selectedFilters = Array.from(document.querySelectorAll('input[name="filters"]:checked'))
@@ -150,13 +167,15 @@ document.getElementById('validate-btn').addEventListener('click', async () => {
 });
 
 // Gère la recherche par le bouton de recherche
-// Réutilise également les mêmes logiques pour plus de cohérence
 document.getElementById('searchButton').addEventListener('click', async () => {
     document.getElementById('validate-btn').click();
 });
 
 // Charge les médicaments à l'initialisation
-document.addEventListener('DOMContentLoaded', () => loadMedicaments());
+document.addEventListener('DOMContentLoaded', () => {
+    loadMedicaments();
+    updateResetButtonState();
+});
 
 // Réinitialise les filtres et recharge la page
 document.getElementById('reset-btn').addEventListener('click', () => {
@@ -164,6 +183,11 @@ document.getElementById('reset-btn').addEventListener('click', () => {
     document.getElementById('searchInput').value = '';
     location.reload();
 });
+
+// Surveiller les changements dans les filtres et le champ de recherche
+document.getElementById('filters-form').addEventListener('change', updateResetButtonState);
+document.getElementById('searchInput').addEventListener('input', updateResetButtonState);
+
 
 
 // Fonction pour récupérer et afficher les données dans les inputs

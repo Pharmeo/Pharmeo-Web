@@ -111,6 +111,31 @@ async function sendPostRequest() {
     }
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    const togglePassword = document.getElementById('togglePassword');
+    const toggleConfirmPassword = document.getElementById('togglePasswords');
+
+    // Fonction de basculement de la visibilité
+    const toggleVisibility = () => {
+        // Alterner le type des deux champs
+        const type = passwordInput.type === 'password' ? 'text' : 'password';
+        passwordInput.type = type;
+        confirmPasswordInput.type = type;
+
+        // Changer l'icône en fonction de l'état
+        togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
+        toggleConfirmPassword.textContent = type === 'password' ? '👁️' : '🙈';
+    };
+
+    // Ajouter l'événement de clic pour le toggle unique
+    togglePassword.addEventListener('click', toggleVisibility);
+    toggleConfirmPassword.addEventListener('click', toggleVisibility);
+});
+
+
+
 // Ajoute un écouteur d'événement pour le bouton d'inscription
 registerButton.addEventListener('click', function (event) {
     event.preventDefault(); // Empêche le comportement par défaut du formulaire
