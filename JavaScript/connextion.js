@@ -76,7 +76,7 @@ async function handleLogin() {
 // Mot de passe oublié
 function handleForgotPassword() {
     const email = emailInput.value.trim();
-    if (email === "toto@gmail.com" || email === "admin@example.com") {
+    if (email) {
         window.location.href = "../MotDePasse/motDePasse.html";
     } else {
         alert("Email non reconnu pour la récupération du mot de passe.");
