@@ -192,7 +192,6 @@ document.getElementById('searchInput').addEventListener('input', updateResetButt
 
 // Fonction pour récupérer et afficher les données dans les inputs
 document.addEventListener('DOMContentLoaded', () => {
-
     function populateFields() {
         document.getElementById('identifiant').value = localStorage.getItem('mail') || '';
         document.getElementById('password').value = localStorage.getItem('password') || '';
@@ -201,19 +200,106 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('mobile').value = localStorage.getItem('numero_telephone') || '';
         document.getElementById('postalCode').value = localStorage.getItem('code_postal') || '';
         document.getElementById('ville').value = localStorage.getItem('ville') || '';
-        // Gérer le fk_profil pour sélectionner le rôle
-        const fkProfil = localStorage.getItem('fk_profil');
-        const roleSelect = document.getElementById('role');
-        if (fkProfil === '1') {
-            roleSelect.value = 'admin';
-        } else if (fkProfil === '3') {
-            roleSelect.value = 'pharmacien';
-        }
+        document.getElementById('adresse').value = localStorage.getItem('adresse') || '';
     }
 
-    // Appeler la fonction pour initialiser les champs avec les données de localStorage
     populateFields();
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const postalCodeInput = document.getElementById("postalCode");
+    const mobileInput = document.getElementById("mobile");
+
+    // Validation du code postal (5 caractères max)
+    postalCodeInput.addEventListener("input", function () {
+        if (postalCodeInput.value.length > 5) {
+            postalCodeInput.value = postalCodeInput.value.substring(0, 5);
+        }
+    });
+
+    // Validation du numéro de téléphone (15 caractères max)
+    mobileInput.addEventListener("input", function () {
+        if (mobileInput.value.length > 15) {
+            mobileInput.value = mobileInput.value.substring(0, 15);
+        }
+    });
+});
+
+// Ajout : Fonction pour enregistrer les modifications via l'API
+document.getElementById('registerButton')?.addEventListener('click', async function () {
+    const messageContainer = document.getElementById('messageContainer');
+    try {
+        messageContainer.innerHTML = '';
+
+        const token = localStorage.getItem('token');
+        if (!token) throw new Error('Token manquant');
+
+        // Récupération des valeurs des champs
+        const identifiant = document.getElementById('identifiant').value.trim();
+        const motDePasse = document.getElementById('password').value.trim();
+        const prenom = document.getElementById('prenom').value.trim();
+        const nom = document.getElementById('nom').value.trim();
+        const mobile = document.getElementById('mobile').value.trim();
+        const adresse = document.getElementById('adresse').value.trim();
+        const ville = document.getElementById('ville').value.trim();
+        const codePostal = document.getElementById('postalCode').value.trim();
+
+        const payload = {
+            compte_a_modifier: { nom_compte: identifiant },
+            nom_compte: identifiant,
+            mot_de_passe: motDePasse,
+            nom: nom,
+            prenom: prenom,
+            numero_telephone: mobile,
+            mail: identifiant,
+            adresse: adresse,
+            ville: ville,
+            code_postal: codePostal
+        };
+
+        // Vérifier si le prénom ou le mot de passe ont été modifiés
+        const isPrénomChanged = localStorage.getItem('prenom') !== prenom;
+        const isMotDePasseChanged = localStorage.getItem('password') !== motDePasse;
+        
+        // Enregistrer les modifications via l'API
+        const response = await fetch('http://localhost:3000/updateClient', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) throw new Error('Échec de l\'enregistrement');
+
+        const result = await response.json();
+        console.log('Modifications enregistrées avec succès', result);
+
+        // Enregistrer les nouvelles valeurs dans localStorage
+        Object.entries(payload).forEach(([key, value]) => {
+            if (typeof value === 'string') {
+                localStorage.setItem(key, value);
+            }
+        });
+
+        messageContainer.innerHTML = '<p style="color: green;">Vos modifications ont été enregistrées avec succès !</p>';
+
+        // Si le prénom ou le mot de passe ont été modifiés, déconnecter l'utilisateur
+        if (isPrénomChanged || isMotDePasseChanged) {
+            localStorage.removeItem('token');
+            window.location.href = '../Connexion/Accuil.html'; // Redirection vers la page de connexion
+        } else {
+            // Sinon, recharger la page
+            location.reload();
+        }
+
+    } catch (error) {
+        console.error('Erreur lors de l\'enregistrement:', error);
+        messageContainer.innerHTML = `<p style="color: red;">${error.message}</p>`;
+    }
+});
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const passwordInput = document.getElementById('password');
@@ -228,122 +314,4 @@ document.addEventListener('DOMContentLoaded', () => {
         togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
     });
 });
-
-
-
-
-
-
-
-
-
-
 //--------------------------------------------------test zones--------------------------------------------------------------------------------\\
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

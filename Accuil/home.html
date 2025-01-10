@@ -33,8 +33,7 @@
                 <label class="form-check-label" for="nervous">Nerveux central</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" id="musculo" name="filters"
-                    value="Musculo-squelettique">
+                <input class="form-check-input" type="radio" id="musculo" name="filters" value="Musculo-squelettique">
                 <label class="form-check-label" for="musculo">Musculo-squelettique</label>
             </div>
             <div class="form-check">
@@ -94,7 +93,7 @@
                 <button type="button" class="btn btn-primary w-100" id="validate-btn">Valider</button>
                 <button type="button" class="btn btn-secondary w-100 mt-2" id="reset-btn">Réinitialiser</button>
             </div>
-            
+
         </form>
     </div>
 
@@ -180,15 +179,20 @@
                     <div class="modal-body">
                         <div class="container d-flex flex-column align-items-center justify-content-center mt-1 p-4 border rounded"
                             style="max-width: 600px;">
-                            <!-- Identifiant -->
+                            <!-- Identifiant (impossible à modifier) -->
                             <div class="mb-3 w-100">
                                 <label for="identifiant" class="form-label">Votre email :</label>
-                                <input type="email" class="form-control" id="identifiant"
-                                    placeholder="exemple@gmail.fr">
+                                <input type="email" class="form-control" id="identifiant" placeholder="exemple@gmail.fr"
+                                    disabled>
                             </div>
 
                             <div class="mb-3 w-100 position-relative">
-                                <label for="password" class="form-label">Votre mot de passe :</label>
+                                <label for="password" class="form-label">Votre mot de passe :<span id="passwordWarning"
+                                        class="position-absolute" style="cursor: pointer;" data-bs-toggle="tooltip"
+                                        data-bs-placement="top" title="Cette modification entraînera une déconnexion">
+                                        ⚠️
+                                    </span>
+                                </label>
                                 <input type="password" class="form-control" id="password" placeholder="ex: toto">
                                 <span id="togglePassword" class="position-absolute"
                                     style="top: 74%; right: 10px; transform: translateY(-50%); cursor: pointer;">
@@ -196,37 +200,44 @@
                                 </span>
                             </div>
 
-                            <div class="mb-3 w-100">
-                                <label for="role" class="form-label">Choisir votre rôle :</label>
-                                <select id="role" class="form-select" required>
-                                    <option value="" selected disabled>-- Sélectionnez un rôle --</option>
-                                    <option value="pharmacien">Pharmacien</option>
-                                    <option value="admin">Administrateur</option>
-                                </select>
-                            </div>
-
                             <hr class="w-100">
 
                             <!-- Prénom, Nom, Mobile in one row -->
                             <div class="row w-100">
                                 <div class="col-md-4 mb-3">
-                                    <label for="prenom" class="form-label">Prénom :</label>
+                                    <label for="prenom" class="form-label">Prénom :<span id="passwordWarning"
+                                            class="position-absolute" style="cursor: pointer;" data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Cette modification entraînera une déconnexion">
+                                            ⚠️
+                                        </span>
+                                    </label>
                                     <input type="text" class="form-control" id="prenom" placeholder="ex: Henri">
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label for="nom" class="form-label">Nom :</label>
                                     <input type="text" class="form-control" id="nom" placeholder="ex: Delacour">
                                 </div>
+                                <!-- Mobile : maximum 15 caractères -->
                                 <div class="col-md-4 mb-3">
                                     <label for="mobile" class="form-label">Mobile :</label>
-                                    <input type="tel" class="form-control" id="mobile" placeholder="ex: 072515****">
+                                    <input type="tel" class="form-control" id="mobile" placeholder="ex: 072515****"
+                                        maxlength="15">
                                 </div>
                             </div>
 
-                            <!-- Code postal -->
+                            <!-- Adresse -->
+                            <div class="mb-3 w-100">
+                                <label for="adresse" class="form-label">Adresse :</label>
+                                <input type="text" class="form-control" id="adresse" placeholder="ex: rue des exemple"
+                                    required>
+                            </div>
+
+                            <!-- Code postal : maximum 5 caractères -->
                             <div class="mb-4 w-100">
                                 <label for="postalCode" class="form-label">Code Postal :</label>
-                                <input type="text" class="form-control" id="postalCode" placeholder="ex: 60200">
+                                <input type="text" class="form-control" id="postalCode" placeholder="ex: 60200"
+                                    maxlength="5">
                             </div>
 
                             <!-- Ville -->
@@ -240,11 +251,13 @@
                                 <button id="registerButton" class="btn btn-primary me-2 " disabled>Enregistrer</button>
                                 <button type="button" class="btn btn-secondary " id="backBtn">Fermer</button>
                             </div>
+                            <div class="mt-3" id="messageContainer"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <script src="../JavaScript/accuil.js"></script>
