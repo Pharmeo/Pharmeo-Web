@@ -1,3 +1,5 @@
+import { SERVER } from './const.js';
+
 // Sélection du champ identifiant, du bouton et de la zone d'erreur
 const identifiantInput = document.getElementById('identifiant');
 const sendPasswordButton = document.getElementById('sendPasswordButton');
@@ -40,7 +42,7 @@ sendPasswordButton.addEventListener('click', async function () {
     };
 
     try {
-        const response = await fetch('http://localhost:3000/sendmail', {
+        const response = await fetch(`${SERVER}/sendmail`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

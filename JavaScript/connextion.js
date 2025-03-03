@@ -1,3 +1,4 @@
+import { SERVER } from "./const.js";
 
 // Sélection des éléments du DOM
 const emailInput = document.getElementById('email');
@@ -27,7 +28,7 @@ async function handleLogin() {
     const loginData = { name: email, password: password };
 
     try {
-        const response = await fetch('http://localhost:3000/login', {
+        const response = await fetch(`${SERVER}/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(loginData),
@@ -43,7 +44,7 @@ async function handleLogin() {
         const loginResult = await response.json();
         localStorage.setItem('token', loginResult.token);
 
-        const userResponse = await fetch('http://localhost:3000/compte', {
+        const userResponse = await fetch(`${SERVER}/compte`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

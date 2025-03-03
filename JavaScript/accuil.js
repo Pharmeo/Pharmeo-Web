@@ -1,3 +1,5 @@
+import { SERVER } from "./const.js";
+
 // Affiche les options de gestion
 document.getElementById("toggleGestionPersonnel").addEventListener("click", function () {
     this.style.display = "none";
@@ -58,7 +60,7 @@ async function loadMedicaments(page = 1) {
     try {
         const token = localStorage.getItem('token');
         if (!token) throw new Error('Token manquant');
-        const response = await fetch(`http://localhost:3000/medicaments/${page}`, {
+        const response = await fetch(`${SERVER}/medicaments/${page}`, {
             method: 'GET', headers: { 'Authorization': `${token}` }
         });
         if (!response.ok) throw new Error('Erreur lors de la récupération des médicaments');
@@ -127,7 +129,7 @@ document.getElementById('validate-btn').addEventListener('click', async () => {
     const token = localStorage.getItem('token');
     if (!token) return console.error('Token manquant');
 
-    let url = 'http://localhost:3000/medicaments';
+    let url = `${SERVER}/medicaments`;
 
     // Construire la query string en fonction des entrées
     const queryParams = new URLSearchParams();
@@ -262,7 +264,7 @@ document.getElementById('registerButton')?.addEventListener('click', async funct
         const isMotDePasseChanged = localStorage.getItem('password') !== motDePasse;
         
         // Enregistrer les modifications via l'API
-        const response = await fetch('http://localhost:3000/updateClient', {
+        const response = await fetch(`${SERVER}/updateClient`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',

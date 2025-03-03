@@ -1,3 +1,5 @@
+import { SERVER } from "./const.js";
+
 const identifiant = document.getElementById('identifiant');
 const password = document.getElementById('password');
 const confirmPassword = document.getElementById('confirmPassword');
@@ -91,7 +93,7 @@ async function sendPostRequest() {
 
     // Envoi de la requête à l'API
     try {
-        const response = await fetch('http://localhost:3000/createClient', {
+        const response = await fetch(`${SERVER}/createClient`, {
             method: 'POST',
             headers: {
                 'Authorization': `${token}`,
