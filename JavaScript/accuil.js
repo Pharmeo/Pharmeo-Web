@@ -57,15 +57,20 @@ let currentPage = 1;
 const totalItems = 100, itemsPerPage = 25, totalPages = Math.ceil(totalItems / itemsPerPage);
 
 async function loadMedicaments(page = 1) {
+    console.log(`Chargement des médicaments pour la page ${page}`);
     try {
         const token = localStorage.getItem('token');
         if (!token) throw new Error('Token manquant');
         const response = await fetch(`${SERVER}/medicaments/${page}`, {
-            method: 'GET', headers: { 'Authorization': `${token}` }
+            method: 'GET',
+            headers: { 'Authorization': `${token}` }
         });
-        if (!response.ok) throw new Error('Erreur lors de la récupération des médicaments');
 
+        if (!response.ok) throw new Error('Erreur lors de la récupération des médicaments');
         const data = await response.json();
+        
+        console.log('Données reçues:', data);
+
         const cardContainer = document.getElementById('medicamentCards');
         cardContainer.innerHTML = '';
         data.medicaments.forEach(medicament => {
@@ -81,6 +86,7 @@ async function loadMedicaments(page = 1) {
             attachCardClickEvent(card, medicament);
             cardContainer.appendChild(card);
         });
+
         currentPage = page;
         renderPagination();
     } catch (error) {
@@ -90,18 +96,36 @@ async function loadMedicaments(page = 1) {
 
 function renderPagination() {
     const paginationContainer = document.getElementById('pagination');
-    paginationContainer.innerHTML = `
-        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-            <a class="page-link" href="#" onclick="loadMedicaments(${currentPage - 1})">&laquo;</a>
-        </li>
-        ${Array.from({ length: totalPages }, (_, i) => `
-            <li class="page-item ${i + 1 === currentPage ? 'active' : ''}">
-                <a class="page-link" href="#" onclick="loadMedicaments(${i + 1})">${i + 1}</a>
-            </li>`).join('')}
-        <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-            <a class="page-link" href="#" onclick="loadMedicaments(${currentPage + 1})">&raquo;</a>
-        </li>`;
+    paginationContainer.innerHTML = '';
+
+    const prevBtn = document.createElement('li');
+    prevBtn.classList.add('page-item');
+    if (currentPage === 1) prevBtn.classList.add('disabled');
+    prevBtn.innerHTML = '<a class="page-link" href="#">&laquo;</a>';
+    prevBtn.addEventListener('click', () => loadMedicaments(currentPage - 1));
+    paginationContainer.appendChild(prevBtn);
+
+    for (let i = 1; i <= totalPages; i++) {
+        const pageItem = document.createElement('li');
+        pageItem.classList.add('page-item');
+        if (i === currentPage) pageItem.classList.add('active');
+        const link = document.createElement('a');
+        link.classList.add('page-link');
+        link.href = '#';
+        link.textContent = i;
+        link.addEventListener('click', () => loadMedicaments(i));
+        pageItem.appendChild(link);
+        paginationContainer.appendChild(pageItem);
+    }
+
+    const nextBtn = document.createElement('li');
+    nextBtn.classList.add('page-item');
+    if (currentPage === totalPages) nextBtn.classList.add('disabled');
+    nextBtn.innerHTML = '<a class="page-link" href="#">&raquo;</a>';
+    nextBtn.addEventListener('click', () => loadMedicaments(currentPage + 1));
+    paginationContainer.appendChild(nextBtn);
 }
+
 
 // Gère l'état du bouton Réinitialiser
 function updateResetButtonState() {
