@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="suppression-medicament.css">
+    <title>Suppression Médicament</title>
+</head>
+
+<body>
+    <div class="d-flex justify-content-center mt-5">
+        <div class="card shadow-lg" style="width: 96%;">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Suppression des Médicaments</h5>
+
+                <div class="input-group" style="width: 300px;">
+                    <input type="text" class="form-control" id="searchInput" placeholder="Barre de recherche"
+                        aria-label="Rechercher un médicament">
+                    <button class="btn btn-primary" style="margin-left: 3%;" id="searchButton">Recherche</button>
+                </div>
+
+                <button class="btn btn-secondary" style="margin-right: 2%;" onclick="history.back()">Retour</button>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table text-center">
+                        <thead class="table-dark">
+                            <tr>
+                                <th scope="col">Nom</th>
+                                <th scope="col">Zone d'action</th>
+                                <th scope="col">Effets secondaires</th>
+                                <th scope="col">Composition</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Suppression</th>
+                            </tr>
+                        </thead>
+                        <tbody id="medicamentTableBody">
+
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-center mt-4">
+                        <!-- Pagination -->
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center" id="pagination">
+                                <!-- La pagination sera remplie par JS -->
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CONFIRMATION BOOTSTRAP -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-top">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-6">Confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body text-center">
+                    Êtes-vous sûr de vouloir supprimer cet élément ?
+                </div>
+                <div class="modal-footer d-flex justify-content-end">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-danger btn-sm" id="confirmDelete" data-bs-dismiss="modal">Oui,
+                        supprimer !</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../JavaScript/suppressionMedicament.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

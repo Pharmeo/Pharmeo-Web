@@ -1,10 +1,61 @@
 import { SERVER } from "./const.js";
 
 // Affiche les options de gestion
-document.getElementById("toggleGestionPersonnel").addEventListener("click", function () {
-    this.style.display = "none";
-    document.querySelectorAll(".gestion-options").forEach(option => option.style.display = "inline-block");
+document.addEventListener("DOMContentLoaded", function () {
+    const toggleGestion = document.getElementById("toggleGestionPersonnel");
+    const pharmacienButton = document.getElementById("pharmacien-button");
+    const suppressionButton = document.getElementById("suppression-button");
+    const medicamentButton = document.getElementById("medicament-button");
+    const gestionOptions = document.querySelectorAll(".gestion-options");
+
+    let modeSuppression = false;
+
+    // Afficher les options de gestion
+    toggleGestion.addEventListener("click", function () {
+        this.style.display = "none";
+        gestionOptions.forEach(option => option.style.display = "inline-block");
+    });
+
+    // Gérer le mode suppression
+    suppressionButton.addEventListener("click", function () {
+        modeSuppression = !modeSuppression;
+
+        if (modeSuppression) {
+            suppressionButton.textContent = "Création";
+            suppressionButton.classList.remove("btn-danger");
+            suppressionButton.classList.add("btn-primary");
+
+            pharmacienButton.textContent = "Supprimer un pharmacien";
+            pharmacienButton.href = "../SuppressionPharmacien/suppression-pharmacien.html"; // Lien de suppression à mettre
+            medicamentButton.textContent = "Supprimer un médicament";
+            medicamentButton.href = "../SuppressionMedicament/suppression-medicament.html"; // Lien de suppression à mettre
+
+            pharmacienButton.classList.remove("btn-primary");
+            pharmacienButton.classList.add("btn-danger");
+
+            medicamentButton.classList.remove("btn-primary");
+            medicamentButton.classList.add("btn-danger");
+        } else {
+            suppressionButton.textContent = "Suppression";
+            suppressionButton.classList.remove("btn-primary");
+            suppressionButton.classList.add("btn-danger");
+
+            pharmacienButton.textContent = "Ajouter un pharmacien";
+            pharmacienButton.href = "../inscription/pageDinscription.html";
+            medicamentButton.textContent = "Ajouter un médicament";
+            medicamentButton.href = "../AjoutMedicament/AjoutMedicament.html";
+
+            pharmacienButton.classList.remove("btn-danger");
+            pharmacienButton.classList.add("btn-primary");
+
+            medicamentButton.classList.remove("btn-danger");
+            medicamentButton.classList.add("btn-primary");
+        }
+    });
 });
+
+
+
 
 // Initialise l'affichage basé sur le profil et le username
 document.addEventListener("DOMContentLoaded", function () {
@@ -340,4 +391,3 @@ document.addEventListener('DOMContentLoaded', () => {
         togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
     });
 });
-//--------------------------------------------------test zones--------------------------------------------------------------------------------\\

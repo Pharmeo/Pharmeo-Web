@@ -15,10 +15,18 @@
     <nav class="navbar navbar-expand-lg fixed-top ml-auto d-flex align-items-center">
         <div class="container-fluid">
             <span class="navbar-brand">PHARMEO</span>
-            <button class="btn btn-danger" id="toggleGestionPersonnel">Gestion personnel</button>
-            <a href="../inscription/pageDinscription.html" class="btn btn-danger gestion-options"
-                style="display: none;">Ajouté un pharmacien</a>
-            <a href="../AjoutMedicament/AjoutMedicament.html" class="btn btn-danger gestion-options" style="display: none;">Ajouté un médicament</a>
+
+            <button class="btn btn-danger" id="toggleGestionPersonnel">Gérer le personnel</button>
+
+            <a id="pharmacien-button" class="gestion-options btn btn-primary" style="display: none;"
+                href="../inscription/pageDinscription.html">Ajouter un pharmacien</a>
+
+            <button id="suppression-button" class="gestion-options btn btn-danger" style="display: none;">Suppression</button>
+
+            <a id="medicament-button" class="gestion-options btn btn-primary" style="display: none;"
+                href="../AjoutMedicament/AjoutMedicament.html">Ajouter un médicament</a>
+
+
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Username
             </button>

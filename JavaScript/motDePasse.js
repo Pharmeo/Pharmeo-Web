@@ -23,16 +23,12 @@ sendPasswordButton.addEventListener('click', async function () {
 
     // Vérifier si le token existe
     if (!token) {
-        errorMessage.style.display = 'block';
-        errorMessage.textContent = "Token manquant. Vous devez être connecté.";
         return;
     }
 
     // Vérifier si l'email saisi correspond à celui stocké dans le localStorage
     const storedEmail = localStorage.getItem('mail');
     if (email !== storedEmail) {
-        errorMessage.style.display = 'block';
-        errorMessage.textContent = "Email non reconnu.";
         return;
     }
 
