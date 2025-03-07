@@ -1,14 +1,15 @@
-import { SERVER } from "./const.js"; // Importation de l'URL du serveur depuis un fichier de constantes
+import { SERVER } from "./const.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     // Récupération des éléments HTML nécessaires
-    const tableBody = document.getElementById("medicamentTableBody");
+    const tableBody = document.querySelector("tbody");
     const paginationContainer = document.getElementById("pagination");
     const searchInput = document.getElementById("searchInput");
     const searchButton = document.getElementById("searchButton");
     
     let currentPage = 1; // Page actuelle, initialisée à 1
-    const maxPages = 4; // Limite du nombre de pages affichées
+    const maxPages = 5; // Limite du nombre de pages affichées
+    const itemsPerPage = 25; // Nombre d'éléments affichés par page
     const token = localStorage.getItem("token"); // Récupération du token d'authentification depuis le stockage local
 
     // Fonction pour récupérer les médicaments depuis l'API
@@ -42,11 +43,36 @@ document.addEventListener("DOMContentLoaded", () => {
                 <td>${medicament.effets_secondaires}</td>
                 <td>${medicament.composition}</td>
                 <td>${medicament.description}</td>
-                <td><button class="btn btn-danger btn-sm delete-btn" data-id="${medicament.identifiant}"><i class="fas fa-trash"></i></button></td>
+                <td><button class="btn btn-danger btn-sm delete-btn" data-id="${medicament.identifiant}" data-bs-toggle="modal" data-bs-target="#confirmModal"><i class="fas fa-trash"></i></button></td>
             `;
             tableBody.appendChild(row); // Ajout de la ligne au tableau
         });
+        setupDeleteButtons(); // Activation des boutons de suppression
     }
+
+    // Fonction pour mettre en place les boutons de suppression
+    function setupDeleteButtons() {
+        document.querySelectorAll(".delete-btn").forEach(button => {
+            button.addEventListener("click", (event) => {
+                const idMedicament = event.currentTarget.dataset.id;
+                document.getElementById("confirmDelete").setAttribute("data-id", idMedicament);
+            });
+        });
+    }
+
+    // Gestion de la suppression d'un médicament
+    document.getElementById("confirmDelete").addEventListener("click", async (event) => {
+        const idMedicament = event.currentTarget.dataset.id;
+        try {
+            await fetch(`${SERVER}/medicament/${idMedicament}`, {
+                method: "DELETE",
+                headers: { "Authorization": `${token}` }
+            });
+            fetchMedicaments(currentPage); // Rafraîchir la liste après suppression
+        } catch (error) {
+            console.error("Erreur lors de la suppression:", error);
+        }
+    });
 
     // Fonction pour mettre à jour la pagination
     function updatePagination() {
