@@ -9,11 +9,32 @@ document.addEventListener("DOMContentLoaded", function () {
     const gestionOptions = document.querySelectorAll(".gestion-options");
 
     let modeSuppression = false;
+    const fk_profil = localStorage.getItem("fk_profil");
 
     // Afficher les options de gestion
     toggleGestion.addEventListener("click", function () {
         this.style.display = "none";
-        gestionOptions.forEach(option => option.style.display = "inline-block");
+
+        if (fk_profil === "3") {
+            // Ajouter dynamiquement le bouton "Supprimer un médicament" uniquement si fk_profil === "3"
+            const medicamentSuppButton = document.createElement("a");
+            medicamentSuppButton.id = "medicament-supp-button";
+            medicamentSuppButton.className = "gestion-options btn btn-danger";
+            medicamentSuppButton.href = "../SuppressionMedicament/suppression-medicament.html";
+            medicamentSuppButton.textContent = "Supprimer un médicament";
+            medicamentButton.insertAdjacentElement("afterend", medicamentSuppButton); // Ajouter après "Ajouter un médicament"
+
+            // Ajouter dynamiquement le bouton "Ajouter un médicament"
+            const medicamentAjoutButton = document.createElement("a");
+            medicamentAjoutButton.id = "medicament-ajout-button";
+            medicamentAjoutButton.className = "gestion-options btn btn-primary";
+            medicamentAjoutButton.href = "../AjoutMedicament/AjoutMedicament.html";
+            medicamentAjoutButton.textContent = "Ajouter un médicament";
+            medicamentButton.insertAdjacentElement("afterend", medicamentAjoutButton); // Ajouter après le bouton existant "Ajouter un médicament"
+        } else {
+            // Afficher tous les boutons si ce n'est pas fk_profil === "3"
+            gestionOptions.forEach(option => option.style.display = "inline-block");
+        }
     });
 
     // Gérer le mode suppression
@@ -25,33 +46,46 @@ document.addEventListener("DOMContentLoaded", function () {
             suppressionButton.classList.remove("btn-danger");
             suppressionButton.classList.add("btn-primary");
 
-            pharmacienButton.textContent = "Supprimer un pharmacien";
-            pharmacienButton.href = "../SuppressionPharmacien/suppression-pharmacien.html"; // Lien de suppression à mettre
-            medicamentButton.textContent = "Supprimer un médicament";
-            medicamentButton.href = "../SuppressionMedicament/suppression-medicament.html"; // Lien de suppression à mettre
+            if (fk_profil === "3") {
+                medicamentButton.textContent = "Supprimer un médicament";
+                medicamentButton.href = "../SuppressionMedicament/suppression-medicament.html";
+                medicamentButton.classList.remove("btn-primary");
+                medicamentButton.classList.add("btn-danger");
+            } else {
+                pharmacienButton.textContent = "Supprimer un pharmacien";
+                pharmacienButton.href = "../SuppressionPharmacien/suppression-pharmacien.html";
+                medicamentButton.textContent = "Supprimer un médicament";
+                medicamentButton.href = "../SuppressionMedicament/suppression-medicament.html";
 
-            pharmacienButton.classList.remove("btn-primary");
-            pharmacienButton.classList.add("btn-danger");
-
-            medicamentButton.classList.remove("btn-primary");
-            medicamentButton.classList.add("btn-danger");
+                pharmacienButton.classList.remove("btn-primary");
+                pharmacienButton.classList.add("btn-danger");
+                medicamentButton.classList.remove("btn-primary");
+                medicamentButton.classList.add("btn-danger");
+            }
         } else {
             suppressionButton.textContent = "Suppression";
             suppressionButton.classList.remove("btn-primary");
             suppressionButton.classList.add("btn-danger");
 
-            pharmacienButton.textContent = "Ajouter un pharmacien";
-            pharmacienButton.href = "../inscription/pageDinscription.html";
-            medicamentButton.textContent = "Ajouter un médicament";
-            medicamentButton.href = "../AjoutMedicament/AjoutMedicament.html";
+            if (fk_profil === "3") {
+                medicamentButton.textContent = "Ajouter un médicament";
+                medicamentButton.href = "../AjoutMedicament/AjoutMedicament.html";
+                medicamentButton.classList.remove("btn-danger");
+                medicamentButton.classList.add("btn-primary");
+            } else {
+                pharmacienButton.textContent = "Ajouter un pharmacien";
+                pharmacienButton.href = "../inscription/pageDinscription.html";
+                medicamentButton.textContent = "Ajouter un médicament";
+                medicamentButton.href = "../AjoutMedicament/AjoutMedicament.html";
 
-            pharmacienButton.classList.remove("btn-danger");
-            pharmacienButton.classList.add("btn-primary");
-
-            medicamentButton.classList.remove("btn-danger");
-            medicamentButton.classList.add("btn-primary");
+                pharmacienButton.classList.remove("btn-danger");
+                pharmacienButton.classList.add("btn-primary");
+                medicamentButton.classList.remove("btn-danger");
+                medicamentButton.classList.add("btn-primary");
+            }
         }
     });
+
 });
 
 
@@ -60,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function () {
 // Initialise l'affichage basé sur le profil et le username
 document.addEventListener("DOMContentLoaded", function () {
     const gestionButton = document.getElementById("toggleGestionPersonnel");
-    if (gestionButton) gestionButton.style.display = localStorage.getItem("fk_profil") === "1" ? "block" : "none";
+    if (gestionButton) gestionButton.style.display = localStorage.getItem("fk_profil") === "1" || "3" ? "block" : "none";
 
     const usernameButton = document.querySelector('button[data-bs-target="#exampleModal"]');
     const modalUsername = document.getElementById("modalUsername");
@@ -119,7 +153,7 @@ async function loadMedicaments(page = 1) {
 
         if (!response.ok) throw new Error('Erreur lors de la récupération des médicaments');
         const data = await response.json();
-        
+
         console.log('Données reçues:', data);
 
         const cardContainer = document.getElementById('medicamentCards');
@@ -337,7 +371,7 @@ document.getElementById('registerButton')?.addEventListener('click', async funct
         // Vérifier si le prénom ou le mot de passe ont été modifiés
         const isPrénomChanged = localStorage.getItem('prenom') !== prenom;
         const isMotDePasseChanged = localStorage.getItem('password') !== motDePasse;
-        
+
         // Enregistrer les modifications via l'API
         const response = await fetch(`${SERVER}/updateClient`, {
             method: 'PATCH',
