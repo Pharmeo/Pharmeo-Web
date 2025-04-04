@@ -21,7 +21,8 @@
             <a id="pharmacien-button" class="gestion-options btn btn-primary" style="display: none;"
                 href="../inscription/pageDinscription.html">Ajouter un pharmacien</a>
 
-            <button id="suppression-button" class="gestion-options btn btn-danger" style="display: none;">Suppression</button>
+            <button id="suppression-button" class="gestion-options btn btn-danger"
+                style="display: none;">Suppression</button>
 
             <a id="medicament-button" class="gestion-options btn btn-primary" style="display: none;"
                 href="../AjoutMedicament/AjoutMedicament.html">Ajouter un médicament</a>
@@ -136,20 +137,23 @@
                     <div class="row">
                         <!-- Image à gauche -->
                         <div class="col-md-4">
-                            <img src="../Pictures/pictures-medicaments.webp" alt="Image du médicament" class="img-fluid"
+                            <img src="../Pictures/medicament.webp" alt="Image du médicament" class="img-fluid"
                                 id="medicamentImage">
                         </div>
                         <!-- Informations à droite -->
-                        <div class="col-md-8 d-flex flex-column mt-4 ">
-                            <h6 id="medicamentName"></h6>
-                            <p><strong>Zone d'action :</strong> <span id="zoneAction"></span></p>
-                            <p><strong>Effets secondaires :</strong> <span id="effetsSecondaires"></span></p>
-                            <p><strong>Composition :</strong> <span id="composition"></span></p>
-                            <p><strong>Description :</strong> <span id="description"></span></p>
+                        <div class="col-md-8 d-flex flex-column mt-4" id="medicamentInfos">
+                            <h6><span class="editable" id="medicamentName"></span></h6>
+                            <p><strong>Zone d'action :</strong> <span class="editable" id="zoneAction"></span></p>
+                            <p><strong>Effets secondaires :</strong> <span class="editable"id="effetsSecondaires"></span></p>
+                            <p><strong>Composition :</strong> <span class="editable" id="composition"></span></p>
+                            <p><strong>Description :</strong> <span class="editable" id="description"></span></p>
+                            <p><strong>Stock :</strong> <span class="editable" id="stock"></span></p>
                         </div>
+
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="editButton">Modifier</button>
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fermer</button>
                 </div>
             </div>

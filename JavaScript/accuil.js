@@ -163,7 +163,7 @@ async function loadMedicaments(page = 1) {
             card.classList.add('col-md-4', 'mb-3');
             card.innerHTML = `
                 <div class="card card-custom">
-                    <img src="../Pictures/pictures-medicaments.webp" class="card-img-top" alt="image médicament">
+                    <img src="../Pictures/medicament.webp" class="card-img-top" alt="image médicament">
                     <div class="card-body">
                         <h5 class="card-title">${medicament.nom}</h5>
                     </div>
@@ -261,7 +261,7 @@ document.getElementById('validate-btn').addEventListener('click', async () => {
                 card.classList.add('col-md-4', 'mb-3');
                 card.innerHTML = `
                     <div class="card card-custom">
-                        <img src="../Pictures/pictures-medicaments.webp" class="card-img-top" alt="image médicament">
+                        <img src="../Pictures/medicament.webp" class="card-img-top" alt="image médicament">
                         <div class="card-body">
                             <h5 class="card-title">${medicament.nom}</h5>
                         </div>
@@ -423,5 +423,60 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Changer l'icône en fonction de l'état
         togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
+    });
+});
+
+
+//=======================================teste zones==========================================================\\
+
+document.addEventListener('DOMContentLoaded', () => {
+    const editButton = document.getElementById('editButton');
+    let isEditing = false;
+
+    editButton.addEventListener('click', () => {
+        const fields = ['medicamentName','zoneAction', 'effetsSecondaires', 'composition', 'description', 'stock'];
+
+        if (!isEditing) {
+            // Passer en mode édition
+            fields.forEach(id => {
+                const span = document.getElementById(id);
+                const value = span.textContent;
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'form-control my-1';
+                input.value = value;
+                input.dataset.originalId = id;
+                span.replaceWith(input);
+                input.id = id; // conserver le même id pour simplifier
+            });
+
+            editButton.textContent = 'Sauvegarder';
+            editButton.classList.remove('btn-primary');
+            editButton.classList.add('btn-success');
+            isEditing = true;
+        } else {
+            // Récupérer les nouvelles valeurs et repasser en mode affichage
+            const updatedData = {};
+            fields.forEach(id => {
+                const input = document.getElementById(id);
+                const value = input.value;
+                updatedData[id] = value;
+
+                const span = document.createElement('span');
+                span.id = id;
+                span.className = 'editable';
+                span.textContent = value;
+                input.replaceWith(span);
+            });
+
+            // TODO: faire un appel API ici pour sauvegarder les données modifiées
+
+            editButton.textContent = 'Modifier';
+            editButton.classList.remove('btn-success');
+            editButton.classList.add('btn-primary');
+            isEditing = false;
+
+            console.log('Données modifiées :', updatedData);
+        }
     });
 });
