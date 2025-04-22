@@ -26,13 +26,13 @@
         <div class="row g-3 align-items-center justify-content-center mb-3">
             <div class="col-auto">
                 <label for="password" class="col-form-label">Password :</label>
-                <span id="togglePassword" class="position-absolute"
-                    style="top: 30%; left: 57%; cursor: pointer;">
+
+            </div>
+            <div class="col-auto position-relative">
+                <input type="password" id="password" class="form-control pe-5" placeholder="Votre mot de passe" required>
+                <span id="togglePassword" class="position-absolute top-50 translate-middle-y end-0 me-3" style="cursor: pointer;">
                     👁️
                 </span>
-            </div>
-            <div class="col-auto">
-                <input type="password" id="password" class="form-control" placeholder="Votre mot de passe" required>
             </div>
             <div class="col-auto">
                 <small id="passwordError" class="text-danger"></small>

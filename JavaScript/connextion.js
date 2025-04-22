@@ -89,14 +89,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const togglePassword = document.getElementById('togglePassword');
 
     togglePassword.addEventListener('click', () => {
-        // Basculer le type d'input entre "password" et "text"
         const type = passwordInput.type === 'password' ? 'text' : 'password';
         passwordInput.type = type;
-
-        // Changer l'icône en fonction de l'état
         togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
     });
 });
+
 
 // Ajout des écouteurs
 emailInput.addEventListener('input', validateInputs);
