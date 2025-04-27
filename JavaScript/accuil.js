@@ -131,11 +131,13 @@ inputs.forEach(input => input.addEventListener('input', function () {
 
 // Affiche les détails d’un médicament dans une modale
 function handleCardClick(medicament) {
+    document.getElementById('identifiant').textContent = medicament.identifiant;
     document.getElementById('medicamentName').textContent = medicament.nom;
     document.getElementById('zoneAction').textContent = medicament.zone_action;
     document.getElementById('effetsSecondaires').textContent = medicament.effets_secondaires;
     document.getElementById('composition').textContent = medicament.composition;
     document.getElementById('description').textContent = medicament.description;
+   // document.getElementById('quantite').textContent = medicament.quantite;
     new bootstrap.Modal(document.getElementById('medicamentModal')).show();
 }
 
@@ -432,13 +434,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-
 document.addEventListener('DOMContentLoaded', () => {
     const editButton = document.getElementById('editButton');
+    const closeButton = document.getElementById('closeButton');
     let isEditing = false;
 
     editButton.addEventListener('click', () => {
-        const fields = ['medicamentName','zoneAction', 'effetsSecondaires', 'composition', 'description', 'stock'];
+        const fields = ['medicamentName', 'zoneAction', 'effetsSecondaires', 'composition', 'description', 'quantite'];
 
         if (!isEditing) {
             // Passer en mode édition
@@ -449,17 +451,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 input.type = 'text';
                 input.className = 'form-control my-1';
                 input.value = value;
+                input.dataset.originalValue = value; // <=== sauvegarde l'ancienne valeur
                 input.dataset.originalId = id;
                 span.replaceWith(input);
-                input.id = id; // conserver le même id pour simplifier
+                input.id = id; // conserver même ID
             });
 
             editButton.textContent = 'Sauvegarder';
             editButton.classList.remove('btn-primary');
             editButton.classList.add('btn-success');
+
+            closeButton.textContent = 'Annuler';
+            closeButton.removeAttribute('data-bs-dismiss'); // désactiver fermeture automatique
             isEditing = true;
         } else {
-            // Récupérer les nouvelles valeurs et repasser en mode affichage
+            // Sauvegarder les nouvelles valeurs
             const updatedData = {};
             fields.forEach(id => {
                 const input = document.getElementById(id);
@@ -473,14 +479,69 @@ document.addEventListener('DOMContentLoaded', () => {
                 input.replaceWith(span);
             });
 
-            // TODO: faire un appel API ici pour sauvegarder les données modifiées
+            editButton.textContent = 'Modifier';
+            editButton.classList.remove('btn-success');
+            editButton.classList.add('btn-primary');
+
+            closeButton.textContent = 'Fermer';
+            closeButton.setAttribute('data-bs-dismiss', 'modal'); // réactiver fermeture
+            isEditing = false;
+
+            
+
+            // --- Ajout ici pour envoyer la mise à jour ---
+            const idMedicament = document.getElementById('identifiant').textContent;
+            /*const idPharmacie =  récupère ton id pharmacie ici */
+            console.log('Données modifiées :', idMedicament);
+            // Construction du body à envoyer
+            const body = {
+                nom: updatedData.medicamentName,
+                zone_action: updatedData.zoneAction,
+                effets_secondaires: updatedData.effetsSecondaires,
+                composition: updatedData.composition,
+                description: updatedData.description,
+                quantite: updatedData.quantite
+            };
+
+            fetch(`/updateMedicament/${idMedicament}/${idPharmacie}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}` // si tu utilises un token auth
+                },
+                body: JSON.stringify(body)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Mise à jour réussie:', data);
+                    // Tu peux aussi afficher un message de succès à l'utilisateur
+                })
+        }
+    });
+
+    closeButton.addEventListener('click', (event) => {
+        if (isEditing) {
+            event.preventDefault(); // empêcher la fermeture de la modale
+
+            const fields = ['medicamentName', 'zoneAction', 'effetsSecondaires', 'composition', 'description', 'quantite'];
+            fields.forEach(id => {
+                const input = document.getElementById(id);
+                const originalValue = input.dataset.originalValue || '';
+                const span = document.createElement('span');
+                span.id = id;
+                span.className = 'editable';
+                span.textContent = originalValue;
+                input.replaceWith(span);
+            });
 
             editButton.textContent = 'Modifier';
             editButton.classList.remove('btn-success');
             editButton.classList.add('btn-primary');
-            isEditing = false;
 
-            console.log('Données modifiées :', updatedData);
+            closeButton.textContent = 'Fermer';
+            closeButton.setAttribute('data-bs-dismiss', 'modal'); // réactiver la fermeture normale
+            isEditing = false;
         }
     });
 });
+
