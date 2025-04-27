@@ -44,7 +44,7 @@ async function loadComptes() {
 
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${getProfilLabel(compte.fk_profil)}</td>
+                <!--<td>${getProfilLabel(compte.fk_profil)}</td>-->
                 <td>${compte.nom || "Non défini"}</td>
                 <td>${compte.prenom || "Non défini"}</td>
                 <td>${compte.nom_compte || "Non défini"}</td>
