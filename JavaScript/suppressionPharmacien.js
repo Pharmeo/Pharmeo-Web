@@ -31,8 +31,20 @@ async function loadComptes() {
 
             console.log(`Compte chargé: ID=${compte.identifiant}, Nom=${compte.nom}`);
 
+            const getProfilLabel = (fk_profil) => {
+                switch (fk_profil) {
+                    case 1:
+                        return "Administrateur";
+                    case 3:
+                        return "Pharmacien";
+                    default:
+                        return "Non défini";
+                }
+            };
+
             const row = document.createElement('tr');
             row.innerHTML = `
+                <td>${getProfilLabel(compte.fk_profil)}</td>
                 <td>${compte.nom || "Non défini"}</td>
                 <td>${compte.prenom || "Non défini"}</td>
                 <td>${compte.nom_compte || "Non défini"}</td>
