@@ -137,9 +137,14 @@ function handleCardClick(medicament) {
     document.getElementById('effetsSecondaires').textContent = medicament.effets_secondaires;
     document.getElementById('composition').textContent = medicament.composition;
     document.getElementById('description').textContent = medicament.description;
-   // document.getElementById('quantite').textContent = medicament.quantite;
+    document.getElementById('quantite').textContent = medicament.quantite;
+    document.getElementById('medicamentImage').src = medicament.chemin_image;
+    document.getElementById('medicamentImage').alt = medicament.nom_image;
+
+    // Affiche la modale
     new bootstrap.Modal(document.getElementById('medicamentModal')).show();
 }
+
 
 // Ajoute un événement de clic à une carte médicament
 function attachCardClickEvent(card, medicament) {
@@ -154,9 +159,10 @@ const totalItems = 100, itemsPerPage = 25, totalPages = Math.ceil(totalItems / i
 async function loadMedicaments(page = 1) {
     console.log(`Chargement des médicaments pour la page ${page}`);
     try {
+        const idPharmacie = localStorage.getItem('id_pharmacie');
         const token = localStorage.getItem('token');
         if (!token) throw new Error('Token manquant');
-        const response = await fetch(`${SERVER}/medicaments/${page}`, {
+        const response = await fetch(`${SERVER}/medicaments?location=${idPharmacie}`, {
             method: 'GET',
             headers: { 'Authorization': `${token}` }
         });
@@ -172,8 +178,22 @@ async function loadMedicaments(page = 1) {
             const card = document.createElement('div');
             card.classList.add('col-md-4', 'mb-3');
             card.innerHTML = `
-                <div class="card card-custom">
-                    <img src="../Pictures/medicament.webp" class="card-img-top" alt="image médicament">
+                <style>
+                    .card {
+                        height: 400px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+                    }
+
+                    .card-img-top {
+                        height: 300px;
+                        object-fit: cover;
+                    }
+                </style>
+
+                <div class="card" style="width: 32rem;">
+                    <img src="${medicament.chemin_image}" class="card-img-top" alt="${medicament.nom_image}">
                     <div class="card-body">
                         <h5 class="card-title">${medicament.nom}</h5>
                     </div>
@@ -229,12 +249,6 @@ function updateResetButtonState() {
     const resetButton = document.getElementById('reset-btn');
 
     resetButton.disabled = selectedFilters.length === 0 && !searchInput;
-
-    if (selectedFilters.length === 0 && !searchInput) {
-        resetButton.disabled = true;
-    } else {
-        resetButton.disabled = false;
-    }
 }
 
 // Recherche de médicaments selon les filtres ou le champ de recherche
@@ -263,13 +277,27 @@ document.getElementById('validate-btn').addEventListener('click', async () => {
         const cardContainer = document.getElementById('medicamentCards');
         cardContainer.innerHTML = '';
 
-        if (data.medicaments?.length) {
+        if (data.medicaments && data.medicaments.length) {
             data.medicaments.forEach(medicament => {
                 const card = document.createElement('div');
                 card.classList.add('col-md-4', 'mb-3');
                 card.innerHTML = `
-                    <div class="card card-custom">
-                        <img src="../Pictures/medicament.webp" class="card-img-top" alt="image médicament">
+                    <style>
+                    .card {
+                        height: 400px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+                    }
+
+                    .card-img-top {
+                        height: 300px;
+                        object-fit: cover;
+                    }
+                    </style>
+
+                    <div class="card" style="width: 32rem;">
+                        <img src="${medicament.chemin_image}" class="card-img-top" alt="${medicament.nom_image}">
                         <div class="card-body">
                             <h5 class="card-title">${medicament.nom}</h5>
                         </div>
@@ -284,6 +312,7 @@ document.getElementById('validate-btn').addEventListener('click', async () => {
         console.error('Erreur:', error);
     }
 });
+
 
 // Quand on clique sur le bouton de recherche, on lance la recherche
 document.getElementById('searchButton').addEventListener('click', async () => {
@@ -320,6 +349,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('postalCode').value = localStorage.getItem('code_postal') || '';
         document.getElementById('ville').value = localStorage.getItem('ville') || '';
         document.getElementById('adresse').value = localStorage.getItem('adresse') || '';
+
+
     }
 
     populateFields();
@@ -363,6 +394,7 @@ document.getElementById('registerButton')?.addEventListener('click', async funct
         const ville = document.getElementById('ville').value.trim();
         const codePostal = document.getElementById('postalCode').value.trim();
 
+
         const payload = {
             compte_a_modifier: { nom_compte: identifiant },
             nom_compte: identifiant,
@@ -373,7 +405,8 @@ document.getElementById('registerButton')?.addEventListener('click', async funct
             mail: identifiant,
             adresse: adresse,
             ville: ville,
-            code_postal: codePostal
+            code_postal: codePostal,
+
         };
 
         // Vérifier si le prénom ou le mot de passe ont été modifiés
@@ -418,7 +451,6 @@ document.getElementById('registerButton')?.addEventListener('click', async funct
         messageContainer.innerHTML = `<p style="color: red;">${error.message}</p>`;
     }
 });
-
 
 document.addEventListener('DOMContentLoaded', () => {
     const passwordInput = document.getElementById('password');
@@ -469,13 +501,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const updatedData = {};
             fields.forEach(id => {
                 const input = document.getElementById(id);
-                const value = input.value;
-                updatedData[id] = value;
+                const originalValue = input.dataset.originalValue;
+                const currentValue = input.value;
+
+                // Comparer la valeur actuelle avec la valeur d'origine
+                if (currentValue !== originalValue) {
+                    updatedData[id] = currentValue; // ajouter seulement la valeur modifiée
+                } else {
+                    updatedData[id] = originalValue; // ajouter la valeur originale si non modifiée
+                }
 
                 const span = document.createElement('span');
                 span.id = id;
                 span.className = 'editable';
-                span.textContent = value;
+                span.textContent = currentValue;
                 input.replaceWith(span);
             });
 
@@ -487,13 +526,13 @@ document.addEventListener('DOMContentLoaded', () => {
             closeButton.setAttribute('data-bs-dismiss', 'modal'); // réactiver fermeture
             isEditing = false;
 
-            
-
-            // --- Ajout ici pour envoyer la mise à jour ---
+            // --- Envoi des données après modification ---
             const idMedicament = document.getElementById('identifiant').textContent;
-            /*const idPharmacie =  récupère ton id pharmacie ici */
-            console.log('Données modifiées :', idMedicament);
-            // Construction du body à envoyer
+            const idPharmacie = localStorage.getItem("id_pharmacie");
+            const token = localStorage.getItem('token');
+            console.log('Données modifiées :', idPharmacie);
+
+            // Construction du body à envoyer avec toutes les données
             const body = {
                 nom: updatedData.medicamentName,
                 zone_action: updatedData.zoneAction,
@@ -503,45 +542,47 @@ document.addEventListener('DOMContentLoaded', () => {
                 quantite: updatedData.quantite
             };
 
-            fetch(`/updateMedicament/${idMedicament}/${idPharmacie}`, {
+            // Envoi via fetch
+            fetch(`${SERVER}/updateMedicament/${idMedicament}/${idPharmacie}`, {
                 method: 'PATCH',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}` // si tu utilises un token auth
+                    'Authorization': ` ${token}`, // si tu utilises un token auth
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(body)
             })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Mise à jour réussie:', data);
-                    // Tu peux aussi afficher un message de succès à l'utilisateur
-                })
-        }
-    });
+            .then(response => response.json())
+            .then(data => {
+                console.log('Mise à jour réussie :', data);
 
-    closeButton.addEventListener('click', (event) => {
-        if (isEditing) {
-            event.preventDefault(); // empêcher la fermeture de la modale
-
-            const fields = ['medicamentName', 'zoneAction', 'effetsSecondaires', 'composition', 'description', 'quantite'];
-            fields.forEach(id => {
-                const input = document.getElementById(id);
-                const originalValue = input.dataset.originalValue || '';
-                const span = document.createElement('span');
-                span.id = id;
-                span.className = 'editable';
-                span.textContent = originalValue;
-                input.replaceWith(span);
+                // Rafraîchir la page après la sauvegarde
+                window.location.reload();
             });
-
-            editButton.textContent = 'Modifier';
-            editButton.classList.remove('btn-success');
-            editButton.classList.add('btn-primary');
-
-            closeButton.textContent = 'Fermer';
-            closeButton.setAttribute('data-bs-dismiss', 'modal'); // réactiver la fermeture normale
-            isEditing = false;
         }
+
+        closeButton.addEventListener('click', (event) => {
+            if (isEditing) {
+                event.preventDefault(); // empêcher la fermeture de la modale
+
+                const fields = ['medicamentName', 'zoneAction', 'effetsSecondaires', 'composition', 'description', 'quantite'];
+                fields.forEach(id => {
+                    const input = document.getElementById(id);
+                    const originalValue = input.dataset.originalValue || '';
+                    const span = document.createElement('span');
+                    span.id = id;
+                    span.className = 'editable';
+                    span.textContent = originalValue;
+                    input.replaceWith(span);
+                });
+
+                editButton.textContent = 'Modifier';
+                editButton.classList.remove('btn-success');
+                editButton.classList.add('btn-primary');
+
+                closeButton.textContent = 'Fermer';
+                closeButton.setAttribute('data-bs-dismiss', 'modal'); // réactiver la fermeture normale
+                isEditing = false;
+            }
+        });
     });
 });
-

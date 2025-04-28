@@ -66,6 +66,7 @@ async function handleLogin() {
         localStorage.setItem('ville', userData.compte.ville);
         localStorage.setItem('code_postal', userData.compte.code_postal);
         localStorage.setItem('password', userData.compte.mot_de_passe);
+        localStorage.setItem('id_pharmacie', userData.compte.id_pharmacie);
 
         window.location.href = "../Accuil/home.html";
     } catch (error) {

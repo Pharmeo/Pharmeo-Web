@@ -13,6 +13,7 @@ const role = document.getElementById('role');
 const registerButton = document.getElementById('registerButton');
 const emailError = document.getElementById('emailError');
 const passwordError = document.getElementById('passwordError');
+const pharmacie = document.getElementById('pharmacie');
 
 // Validation de l'email
 function validateEmail(email) {
@@ -27,7 +28,7 @@ function validatePasswords() {
 
 // Fonction pour vérifier si tous les champs sont remplis et valides
 function checkInputs() {
-    const inputs = [identifiant, password, confirmPassword, prenom, nom, mobile, postalCode, adresse, ville, role];
+    const inputs = [identifiant, password, confirmPassword, prenom, nom, mobile, postalCode, adresse, ville, role, pharmacie];
     let allFilled = true;
 
     // Vérifie que chaque champ est rempli
@@ -58,7 +59,7 @@ function checkInputs() {
 }
 
 // Ajoute un écouteur d'événement pour chaque champ
-const inputs = [identifiant, password, confirmPassword, prenom, nom, mobile, postalCode, adresse, ville, role];
+const inputs = [identifiant, password, confirmPassword, prenom, nom, mobile, postalCode, adresse, ville, role, pharmacie];
 inputs.forEach(input => {
     input.addEventListener('input', checkInputs);
 });
@@ -67,6 +68,21 @@ inputs.forEach(input => {
 async function sendPostRequest() {
     if (!validatePasswords()) {
         alert('Les mots de passe ne correspondent pas');
+        return;
+    }
+
+    // Mappage des pharmacies aux ID correspondants
+    const pharmacieMapping = {
+        "Pharmacie Compiègne": "1",
+        "Pharmacie Beauvais": "2",
+        "Pharmacie Senlis": "3"
+    };
+
+    // Récupère l'ID correspondant à la pharmacie choisie
+    const pharmacieId = pharmacieMapping[pharmacie.value] || null;
+
+    if (!pharmacieId) {
+        alert('Veuillez sélectionner une pharmacie valide');
         return;
     }
 
@@ -81,7 +97,8 @@ async function sendPostRequest() {
         mail: identifiant.value,
         adresse: adresse.value,
         ville: ville.value,
-        code_postal: postalCode.value
+        code_postal: postalCode.value,
+        id_pharmacie: pharmacieId  // Utilisation de l'ID de la pharmacie
     };
 
     // Récupère le token depuis le stockage local
@@ -135,8 +152,6 @@ document.addEventListener('DOMContentLoaded', () => {
     togglePassword.addEventListener('click', toggleVisibility);
     toggleConfirmPassword.addEventListener('click', toggleVisibility);
 });
-
-
 
 // Ajoute un écouteur d'événement pour le bouton d'inscription
 registerButton.addEventListener('click', function (event) {
